@@ -20,11 +20,11 @@ public interface FileFeign {
     @PostMapping(value = "/api/v1/file/", produces = {MediaType.MULTIPART_FORM_DATA_VALUE})
     ResponseEntity<List<FileDto>> save(@ModelAttribute  List<FileRequest> requestList);
     @GetMapping(value = "/api/v1/file/{tableNo}/{fileType}")
-    ResponseEntity<List<FileDto>> files(@PathVariable Long tableNo, @PathVariable FileType fileType);
+    ResponseEntity<List<FileDto>> files(@PathVariable(name = "tableNo") Long tableNo, @PathVariable(name = "fileType") FileType fileType);
     @GetMapping(value = "/api/v1/file/{fileType}")
-    ResponseEntity<List<FileDto>> files(@ModelAttribute List<Long> tableNos, @PathVariable  FileType fileType);
+    ResponseEntity<List<FileDto>> files(@ModelAttribute List<Long> tableNos, @PathVariable(name = "fileType")  FileType fileType);
     @DeleteMapping(value = "/api/v1/file/{tableNo}/{fileType}")
-    ResponseEntity<Boolean> remove(@PathVariable Long tableNo, @PathVariable  FileType fileType);
+    ResponseEntity<Boolean> remove(@PathVariable(name = "tableNo") Long tableNo, @PathVariable(name = "fileType")  FileType fileType);
     @DeleteMapping(value = "/api/v1/file/{fileType}")
-    ResponseEntity<Boolean> remove(@ModelAttribute List<Long> tableNos, @PathVariable  FileType fileType);
+    ResponseEntity<Boolean> remove(@ModelAttribute List<Long> tableNos, @PathVariable(name = "fileType")  FileType fileType);
 }
