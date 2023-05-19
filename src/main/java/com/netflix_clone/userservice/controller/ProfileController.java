@@ -1,6 +1,6 @@
 package com.netflix_clone.userservice.controller;
 
-import com.netflix_clone.userservice.repository.domains.ProfileDto;
+import com.netflix_clone.userservice.repository.dto.reference.ProfileDto;
 import com.netflix_clone.userservice.repository.dto.request.ProfileRequest;
 import com.netflix_clone.userservice.service.ProfileService;
 import lombok.Getter;

@@ -1,6 +1,5 @@
 package com.netflix_clone.userservice.repository.dto.reference;
 
-import com.netflix_clone.userservice.repository.domains.ProfileDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Data;

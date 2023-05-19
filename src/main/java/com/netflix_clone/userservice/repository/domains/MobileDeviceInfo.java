@@ -1,5 +1,7 @@
 package com.netflix_clone.userservice.repository.domains;
 
+import com.netflix_clone.userservice.repository.domains.compositionKey.ProfileId;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

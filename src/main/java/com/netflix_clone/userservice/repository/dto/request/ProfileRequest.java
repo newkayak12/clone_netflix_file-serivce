@@ -1,6 +1,5 @@
 package com.netflix_clone.userservice.repository.dto.request;
 
-import com.netflix_clone.userservice.repository.domains.ProfileDto;
 import lombok.*;
 
 /**
