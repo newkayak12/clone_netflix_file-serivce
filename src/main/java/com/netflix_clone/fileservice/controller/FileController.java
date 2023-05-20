@@ -1,6 +1,7 @@
 package com.netflix_clone.fileservice.controller;
 
 import com.netflix_clone.fileservice.enums.FileType;
+import com.netflix_clone.fileservice.exceptions.CommonException;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
 import com.netflix_clone.fileservice.repository.dto.request.FileRequest;
 import com.netflix_clone.fileservice.service.FileService;
@@ -38,12 +39,12 @@ public class FileController {
     }
 
     @DeleteMapping(value = "/{tableNo}/{fileType}")
-    public ResponseEntity<Boolean> remove(@PathVariable Long tableNo, @PathVariable  FileType fileType) {
+    public ResponseEntity<Boolean> remove(@PathVariable Long tableNo, @PathVariable  FileType fileType) throws CommonException {
         return new ResponseEntity<Boolean>(service.remove(tableNo ,fileType), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{fileType}")
-    public ResponseEntity<Boolean> remove(@ModelAttribute List<Long> tableNos, @PathVariable  FileType fileType) {
+    public ResponseEntity<Boolean> remove(@ModelAttribute List<Long> tableNos, @PathVariable  FileType fileType) throws CommonException {
         return new ResponseEntity<Boolean>(service.remove(tableNos ,fileType), HttpStatus.OK);
     }
 }

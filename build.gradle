@@ -1,4 +1,9 @@
 
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
 
 plugins {
     id 'java'
@@ -29,7 +34,7 @@ ext {
 
 dependencies {
 
-//    implementation("org.newkayak:fileUpload:1.0.2")
+    implementation("org.newkayak:fileUpload:1.0.2")
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -53,10 +58,10 @@ dependencies {
 
 
 //Hibernate & QueryDSL
-    implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-core'
     implementation 'org.mariadb.jdbc:mariadb-java-client'
-    annotationProcessor "com.querydsl:querydsl-apt"
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 //ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.1'
@@ -82,32 +87,19 @@ configurations {
     querydsl.extendsFrom compileClasspath
 }
 
-def querydslDirectory = "$buildDir/generated/querydsl"
-
+// querydsl 세팅 시작
+def querydslDir = "$buildDir/generated/querydsl"
 querydsl {
-    library = "com.querydsl:querydsl-apt"
     jpa = true
-    querydslDefault = true
-    querydslSourcesDir = querydslDirectory
+    querydslSourcesDir = querydslDir
 }
-
+sourceSets {
+    main.java.srcDir querydslDir
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
-
-sourceSets {
-    main.java.srcDir querydslDirectory
-}
-
-// compileQuerydsl.doFirst 추가
-compileQuerydsl.doFirst {
-    if ( file(querydslDirectory) )
-        delete(file(querydslDirectory))
-}
-
-tasks.withType(JavaCompile) {
-    options.generatedSourceOutputDirectory = file(querydslDirectory)
-}
-clean.doLast {
-    delete file(querydslDirectory)
-}
+// querydsl 세팅 끝
