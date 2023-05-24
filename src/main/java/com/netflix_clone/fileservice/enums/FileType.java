@@ -8,5 +8,8 @@ public enum FileType {
     PROFILE,
     CONTENTS,
     ACTOR,
-    DIRECTOR
+    DIRECTOR,
+    TICKET,
+    BANNER,
+    NOTICE
 }

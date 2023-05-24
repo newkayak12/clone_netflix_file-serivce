@@ -23,7 +23,7 @@ import java.util.List;
 public class FileController {
     private final FileService service;
 
-    @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<List<FileDto>> save(@ModelAttribute List<FileRequest> requestList) {
         return new ResponseEntity(service.save(requestList), HttpStatus.OK);
     }
@@ -46,5 +46,14 @@ public class FileController {
     @DeleteMapping(value = "/{fileType}")
     public ResponseEntity<Boolean> remove(@ModelAttribute List<Long> tableNos, @PathVariable  FileType fileType) throws CommonException {
         return new ResponseEntity<Boolean>(service.remove(tableNos ,fileType), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/include")
+    public ResponseEntity<Boolean> removeIn(@ModelAttribute List<FileDto> files) throws CommonException {
+        return new ResponseEntity<>(service.removeIn(files), HttpStatus.OK);
+    }
+    @DeleteMapping(value = "/exclude")
+    public ResponseEntity<Boolean> removeNotIn(@ModelAttribute List<FileDto> files) throws CommonException {
+        return new ResponseEntity<>(service.removeNotIn(files), HttpStatus.OK);
     }
 }

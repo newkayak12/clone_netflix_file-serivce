@@ -49,6 +49,7 @@ public class FileService {
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+
     private FileDto resultToDto ( FileResult result ){
         return mapper.map(result, FileDto.class);
     }
@@ -79,16 +80,33 @@ public class FileService {
 
     public Boolean remove(List<Long> tableNos, FileType fileType) throws CommonException {
         List<FileDto> list = repository.files(tableNos, fileType);
-
         this.removeFile(list);
-
         return repository.remove(tableNos, fileType);
     }
 
-    private void removeFile ( List<FileDto> list ) throws CommonException {
+    public Boolean removeNotIn(List<FileDto> list) throws CommonException {
+        FileDto dto = list.stream().findAny().orElseThrow(() -> new CommonException(BecauseOf.NO_DATA));
+        List<FileDto> persistedList = repository.files(dto.getTableNo(), dto.getFileType());
+        persistedList.removeAll(list);
+        this.removeFile(persistedList);
+        return repository.removeNotIn(list.stream().map(FileDto::getFileNo).collect(Collectors.toList()));
+    }
+    public Boolean removeIn(List<FileDto> list) throws CommonException {
+        this.removeFile(list);
+        return repository.removeIn(list.stream().map(FileDto::getFileNo).collect(Collectors.toList()));
+    }
+
+
+
+
+    private Boolean removeFile ( List<FileDto> list ) throws CommonException {
         List<FileResult> result = list.stream().map(dto -> mapper.map(dto, FileResult.class)).collect(Collectors.toList());
 
         // TODO FileUploader => remove
         if ( !result.isEmpty() && fileUpload.remove() <= 0 ) throw new CommonException(BecauseOf.DELETE_FAILURE);
+
+        return true;
     }
+
+
 }
