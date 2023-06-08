@@ -23,19 +23,24 @@ configurations {
     }
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            name "jitpack"
+            url "https://jitpack.io"
+        }
+    }
 }
+
 
 ext {
     set('springCloudVersion', "2021.0.7")
 }
 
+
+
 dependencies {
-
-    implementation("org.newkayak:fileUpload:1.0.2")
-
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
@@ -65,6 +70,7 @@ dependencies {
 
 //ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.1'
+    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.2'
 }
 
 

@@ -72,6 +72,27 @@ public class FileRepositoryImpl extends QuerydslRepositorySupport implements Fil
     }
 
     @Override
+    public FileDto file(Long tableNo, FileType fileType) {
+        return query
+                .select(new QFileDto(
+                        file.fileNo,
+                        file.tableNo,
+                        file.fileType,
+                        file.storedFileName,
+                        file.originalFileName,
+                        file.orders,
+                        file.contentType,
+                        file.fileSize
+                ))
+                .from(file)
+                .where(
+                        file.tableNo.eq(tableNo)
+                                .and(file.fileType.eq(fileType))
+                )
+                .fetchOne();
+    }
+
+    @Override
     public Boolean remove(Long tableNo, FileType fileType) {
         return query.delete(file).where(file.tableNo.eq(tableNo).and(file.fileType.eq(fileType))).execute() > 0;
     }
@@ -79,5 +100,15 @@ public class FileRepositoryImpl extends QuerydslRepositorySupport implements Fil
     @Override
     public Boolean remove(List<Long> tableNos, FileType fileType) {
         return query.delete(file).where(file.tableNo.in(tableNos).and(file.fileType.eq(fileType))).execute() > 0;
+    }
+
+    @Override
+    public Boolean removeNotIn(List<Long> fileNos) {
+        return query.delete(file).where(file.fileNo.notIn(fileNos)).execute() > 0;
+    }
+
+    @Override
+    public Boolean removeIn(List<Long> fileNos) {
+        return query.delete(file).where(file.fileNo.in(fileNos)).execute() > 0;
     }
 }

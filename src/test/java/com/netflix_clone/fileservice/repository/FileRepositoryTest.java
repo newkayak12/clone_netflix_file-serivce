@@ -1,7 +1,6 @@
 package com.netflix_clone.fileservice.repository;
 
 import com.netflix_clone.fileservice.exceptions.BecauseOf;
-import com.netflix_clone.fileservice.repository.dto.request.SignInRequest;
 import com.netflix_clone.fileservice.repository.fileRepository.FileRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,19 +28,4 @@ public class FileRepositoryTest {
     @Autowired
     private FileRepository repository;
 
-    @Test
-    @DisplayName("로그인 테스트")
-    public void signInTest(){
-        //given
-        SignInRequest signInRequest = new SignInRequest();
-        signInRequest.setUserId("test");
-        signInRequest.setUserPwd("pwd");
-
-
-        assertThatThrownBy(() -> {
-            repository.signIn(signInRequest);
-        })
-        .hasMessage(BecauseOf.ACCOUNT_NOT_EXIST.getMsg());
-
-    }
 }

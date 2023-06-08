@@ -4,6 +4,7 @@ import com.netflix_clone.fileservice.enums.FileType;
 import com.netflix_clone.fileservice.exceptions.CommonException;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
 import com.netflix_clone.fileservice.repository.dto.request.FileRequest;
+import com.netflix_clone.fileservice.repository.dto.request.FileRequests;
 import com.netflix_clone.fileservice.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created on 2023-05-12
@@ -23,14 +25,24 @@ import java.util.List;
 public class FileController {
     private final FileService service;
 
+
     @PostMapping(value = "/save", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<List<FileDto>> save(@ModelAttribute List<FileRequest> requestList) {
-        return new ResponseEntity(service.save(requestList), HttpStatus.OK);
+    public ResponseEntity<FileDto> save(@ModelAttribute FileRequest request) {
+        return new ResponseEntity(service.save(request), HttpStatus.OK);
+    }
+    @PostMapping(value = "/saves", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<List<FileDto>> saves(@ModelAttribute FileRequests requests) {
+        return new ResponseEntity(service.saves(requests), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{tableNo}/{fileType}")
     public ResponseEntity<List<FileDto>> files(@PathVariable Long tableNo, @PathVariable  FileType fileType) {
         return new ResponseEntity(service.files(tableNo, fileType), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{tableNo}/{fileType}/mono")
+    public ResponseEntity<FileDto> file(@PathVariable Long tableNo, @PathVariable FileType fileType) {
+        return new ResponseEntity(service.file(tableNo, fileType), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{fileType}")

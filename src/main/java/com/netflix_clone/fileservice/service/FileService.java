@@ -6,6 +6,7 @@ import com.netflix_clone.fileservice.exceptions.CommonException;
 import com.netflix_clone.fileservice.repository.domains.File;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
 import com.netflix_clone.fileservice.repository.dto.request.FileRequest;
+import com.netflix_clone.fileservice.repository.dto.request.FileRequests;
 import com.netflix_clone.fileservice.repository.fileRepository.FileRepository;
 import com.sun.mail.iap.CommandFailedException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.newkayak.FileUpload.FileResult;
 import org.newkayak.FileUpload.FileUpload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,23 +32,34 @@ public class FileService {
     private final FileUpload fileUpload;
     private final ModelMapper mapper;
 
-    public List<FileDto> save(List<FileRequest> requestList) {
+    public FileDto save(FileRequest request) {
 
         //TODO FileUploader => SAVE
+        log.warn("??????? {}", fileUpload);
 
-        return requestList.stream().map( request -> {
-            FileDto results  = fileUpload.upload(true, request.getRawFile()).stream()
+        FileDto results  = fileUpload.upload(true, request.getRawFile()).stream()
                                 .findFirst()
                                 .map( result -> {
                                     FileDto dto = this.resultToDto(result);
                                     this.migrateDto(dto, request);
+
+                                    System.out.println(mapper.map(dto, File.class));
                                     dto = mapper.map(repository.save(mapper.map(dto, File.class)), FileDto.class);
 
                                     return dto;
                                 })
                                 .orElseGet(() -> null);
-            return results;
-        }).filter(Objects::nonNull).collect(Collectors.toList());
+        return results;
+    }
+
+    public List<FileDto> saves(FileRequests requests) {
+        List<FileResult> result =fileUpload.upload(true, requests.getRawFiles().toArray(MultipartFile[]::new));
+        return result.stream().map( r -> {
+            FileDto dto = this.resultToDto(r);
+            this.migrateDto(dto, requests);
+            dto = mapper.map(repository.save(mapper.map(dto, File.class)), FileDto.class);
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 
@@ -54,6 +67,11 @@ public class FileService {
         return mapper.map(result, FileDto.class);
     }
     private void migrateDto( FileDto dto, FileRequest request ){
+        dto.setTableNo(request.getTableNo());
+        dto.setFileType(request.getFileType());
+        if(Objects.nonNull(request.getOrders())) dto.setOrders(request.getOrders());
+    }
+    private void migrateDto( FileDto dto, FileRequests request ){
         dto.setTableNo(request.getTableNo());
         dto.setFileType(request.getFileType());
         if(Objects.nonNull(request.getOrders())) dto.setOrders(request.getOrders());
@@ -69,6 +87,10 @@ public class FileService {
         return repository.files(tableNos, fileType);
     }
 
+    @Transactional(readOnly = true)
+    public FileDto file(Long tableNo, FileType fileType) {
+        return repository.file(tableNo, fileType);
+    }
 
     public Boolean remove(Long tableNo, FileType fileType) throws CommonException {
         List<FileDto> list = repository.files(tableNo, fileType);
@@ -107,6 +129,7 @@ public class FileService {
 
         return true;
     }
+
 
 
 }

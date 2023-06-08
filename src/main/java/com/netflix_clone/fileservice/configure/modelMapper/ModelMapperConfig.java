@@ -12,10 +12,15 @@ public class ModelMapperConfig {
     private void strictStrategy() {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
-
+    private void useReflection() {
+        this.modelMapper.getConfiguration()
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+    }
     @Bean
     public ModelMapper modelMapper() {
         this.strictStrategy();
+        this.useReflection();
         return modelMapper;
     }
 }

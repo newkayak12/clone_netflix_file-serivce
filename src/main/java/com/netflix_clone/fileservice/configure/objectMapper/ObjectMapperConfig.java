@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+
 @Configuration(value = "objectMapperConfig")
 //@Component
 @RequiredArgsConstructor
@@ -49,5 +51,10 @@ public class ObjectMapperConfig {
         this.deserializeSettings();
         this.serializeSettings();
         return this.objectMapper;
+    }
+
+    @PostConstruct
+    public void msg() {
+        System.out.println("OBJMPPER");
     }
 }

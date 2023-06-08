@@ -12,7 +12,7 @@ public class FileUploadConfig {
 
     @Bean
     public FileUpload fileUpload() {
-        return new FileUpload(Constants.FILE_PATH, false, 1024L * 10L);
+        return new FileUpload(Constants.FILE_PATH, true, 1024L * 10L);
     }
 
 }

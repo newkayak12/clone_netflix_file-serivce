@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created on 2023-05-19
@@ -23,6 +24,7 @@ public class FileDto implements Serializable {
     private Integer orders;
     private String contentType;
     private Long fileSize;
+
 
     @QueryProjection
     public FileDto(Long fileNo, Long tableNo, FileType fileType, String storedFileName, String originalFileName, Integer orders, String contentType, Long fileSize) {

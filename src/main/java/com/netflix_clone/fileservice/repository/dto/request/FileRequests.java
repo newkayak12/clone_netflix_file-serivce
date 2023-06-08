@@ -1,10 +1,11 @@
 package com.netflix_clone.fileservice.repository.dto.request;
 
-import com.netflix_clone.fileservice.enums.FileType;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
-import lombok.*;
-import org.springframework.web.bind.annotation.GetMapping;
+import lombok.Data;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * Created on 2023-05-19
@@ -12,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Data
 @ToString(callSuper = true)
-public class FileRequest extends FileDto {
+public class FileRequests extends FileDto {
 
-    private MultipartFile rawFile;
+    private List<MultipartFile> rawFiles;
 }

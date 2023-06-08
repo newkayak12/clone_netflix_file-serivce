@@ -1,6 +1,7 @@
 package com.netflix_clone.fileservice.repository.domains;
 
 import com.netflix_clone.fileservice.enums.FileType;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Table(name = "file")
 @Entity
 @Cacheable(value = true)
+@ToString
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
