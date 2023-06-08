@@ -26,10 +26,11 @@ configurations {
 allprojects {
     repositories {
         mavenCentral()
-        maven {
-            name "jitpack"
-            url "https://jitpack.io"
-        }
+        mavenLocal()
+//        maven {
+//            name "jitpack"
+//            url "https://jitpack.io"
+//        }
     }
 }
 
@@ -70,7 +71,7 @@ dependencies {
 
 //ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.1'
-    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.2'
+    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.3'
 }
 
 
