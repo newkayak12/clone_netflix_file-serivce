@@ -71,7 +71,7 @@ dependencies {
 
 //ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.1'
-    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.3'
+    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.4'
 }
 
 

@@ -35,24 +35,25 @@ public class FileService {
     public FileDto save(FileRequest request) {
 
         //TODO FileUploader => SAVE
-        log.warn("??????? {}", fileUpload);
+        fileUpload.upload(true, request.getRawFile());
 
-        FileDto results  = fileUpload.upload(true, request.getRawFile()).stream()
-                                .findFirst()
-                                .map( result -> {
-                                    FileDto dto = this.resultToDto(result);
-                                    this.migrateDto(dto, request);
+            FileDto results = fileUpload.upload(true, request.getRawFile())
+                    .stream()
+                    .findFirst()
+                    .map(result -> {
+                        FileDto dto = this.resultToDto(result);
+                        this.migrateDto(dto, request);
+                        dto = mapper.map(repository.save(mapper.map(dto, File.class)), FileDto.class);
 
-                                    System.out.println(mapper.map(dto, File.class));
-                                    dto = mapper.map(repository.save(mapper.map(dto, File.class)), FileDto.class);
+                        return dto;
+                    })
+                    .orElseGet(() -> null);
 
-                                    return dto;
-                                })
-                                .orElseGet(() -> null);
         return results;
     }
 
     public List<FileDto> saves(FileRequests requests) {
+        log.warn("??????? {}", requests);
         List<FileResult> result =fileUpload.upload(true, requests.getRawFiles().toArray(MultipartFile[]::new));
         return result.stream().map( r -> {
             FileDto dto = this.resultToDto(r);

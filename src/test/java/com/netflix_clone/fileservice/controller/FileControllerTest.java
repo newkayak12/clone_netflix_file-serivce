@@ -7,14 +7,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.FileInputStream;
@@ -43,40 +47,62 @@ public class FileControllerTest {
     @DisplayName("저장 테스트")
     @Nested
     class Save {
-        private MockMultipartFile file;
 
-        @BeforeEach
-        public void setUp() throws IOException {
-            InputStream inputStream = new FileInputStream("/Users/sanghyeonkim/Downloads/R1280x0.png");
-            file = new MockMultipartFile("file", "file.png", "png", inputStream);
+        public MockMultipartFile getMockMultiPartFile(String name) {
+            try {
+                InputStream inputStream = new FileInputStream("/Users/sanghyeonkim/Downloads/R1280x0.png");
+                return new MockMultipartFile("rawFile", "file.png", "png", inputStream);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
 
 
         @Test
         @DisplayName("단건")
+        @Transactional
+        @Rollback(value = true)
         public void single() throws Exception {
-            FileRequest fileRequest = new FileRequest();
-            fileRequest.setFileNo(200L);
-            fileRequest.setFileType(FileType.TICKET);
-            fileRequest.setRawFile(file);
+            MockMultipartFile rawFile = this.getMockMultiPartFile("rawFile");
 
-
-            System.out.println(file);
             mockMvc.perform(
                     multipart(prefix+"/save")
-                    .file("rawFile", file.getBytes())
-                    .queryParam("fileNo", "200")
-                    .queryParam("fileType", FileType.TICKET.name())
-
+                    .file(rawFile)
+                    .queryParam("tableNo", "200")
+                    .queryParam("fileType", "TICKET")
             )
             .andExpect(status().isOk())
+            .andExpect(jsonPath("tableNo").value(200))
+            .andExpect(jsonPath("fileType").value(FileType.TICKET.name()))
+            .andExpect(jsonPath("storedFileName").exists())
+            .andExpect(jsonPath("originalFileName").value("file.png"))
+            .andExpect(jsonPath("contentType").value("png"))
             .andDo(print());
 
         }
 
         @Test
         @DisplayName("다중")
-        public void multi(){
+        @Transactional
+        @Rollback(value = true)
+        public void multi() throws Exception {
+            MockMultipartFile rawFiles = this.getMockMultiPartFile("rawFiles");
+
+            mockMvc.perform(
+                            multipart(prefix+"/saves")
+                                    .file(rawFiles)
+                                    .file(rawFiles)
+                                    .queryParam("tableNo", "200")
+                                    .queryParam("fileType", "TICKET")
+                    )
+                    .andExpect(status().isOk())
+//                    .andExpect(jsonPath("tableNo").value(200))
+//                    .andExpect(jsonPath("fileType").value(FileType.TICKET.name()))
+//                    .andExpect(jsonPath("storedFileName").exists())
+//                    .andExpect(jsonPath("originalFileName").value("file.png"))
+//                    .andExpect(jsonPath("contentType").value("png"))
+                    .andDo(print());
 
         }
     }

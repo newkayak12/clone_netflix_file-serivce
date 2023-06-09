@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,5 +16,5 @@ import java.util.List;
 @ToString(callSuper = true)
 public class FileRequests extends FileDto {
 
-    private List<MultipartFile> rawFiles;
+    private List<MultipartFile> rawFiles = new ArrayList<>();
 }
