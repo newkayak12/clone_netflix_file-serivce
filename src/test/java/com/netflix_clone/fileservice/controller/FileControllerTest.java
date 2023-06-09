@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockPart;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -25,7 +26,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,7 +54,7 @@ public class FileControllerTest {
         public MockMultipartFile getMockMultiPartFile(String name) {
             try {
                 InputStream inputStream = new FileInputStream("/Users/sanghyeonkim/Downloads/R1280x0.png");
-                return new MockMultipartFile("rawFile", "file.png", "png", inputStream);
+                return new MockMultipartFile(name, "file.png", "png", inputStream);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -90,18 +93,25 @@ public class FileControllerTest {
             MockMultipartFile rawFiles = this.getMockMultiPartFile("rawFiles");
 
             mockMvc.perform(
-                            multipart(prefix+"/saves")
+                            multipart(prefix+"/saves", rawFiles, rawFiles)
                                     .file(rawFiles)
                                     .file(rawFiles)
                                     .queryParam("tableNo", "200")
                                     .queryParam("fileType", "TICKET")
                     )
                     .andExpect(status().isOk())
-//                    .andExpect(jsonPath("tableNo").value(200))
-//                    .andExpect(jsonPath("fileType").value(FileType.TICKET.name()))
-//                    .andExpect(jsonPath("storedFileName").exists())
-//                    .andExpect(jsonPath("originalFileName").value("file.png"))
-//                    .andExpect(jsonPath("contentType").value("png"))
+                    .andExpect(jsonPath("$.size()").value(2))
+                    .andExpect(jsonPath("$[0].tableNo").value(200))
+                    .andExpect(jsonPath("$[0].fileType").value(FileType.TICKET.name()))
+                    .andExpect(jsonPath("$[0].storedFileName").exists())
+                    .andExpect(jsonPath("$[0].originalFileName").value("file.png"))
+                    .andExpect(jsonPath("$[0].contentType").value("png"))
+
+                    .andExpect(jsonPath("$[1].tableNo").value(200))
+                    .andExpect(jsonPath("$[1].fileType").value(FileType.TICKET.name()))
+                    .andExpect(jsonPath("$[1].storedFileName").exists())
+                    .andExpect(jsonPath("$[1].originalFileName").value("file.png"))
+                    .andExpect(jsonPath("$[1].contentType").value("png"))
                     .andDo(print());
 
         }
