@@ -4,6 +4,7 @@ import com.netflix_clone.fileservice.enums.FileType;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.Arrays;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(of = {"tableNo", "fileType"})
 public class FileDto implements Serializable {
     private Long fileNo;
     private Long tableNo;
@@ -27,7 +29,10 @@ public class FileDto implements Serializable {
 
 
     @QueryProjection
-    public FileDto(Long fileNo, Long tableNo, FileType fileType, String storedFileName, String originalFileName, Integer orders, String contentType, Long fileSize) {
+    public FileDto(Long fileNo, Long tableNo,
+                   FileType fileType, String storedFileName,
+                   String originalFileName, Integer orders,
+                   String contentType, Long fileSize) {
         this.fileNo = fileNo;
         this.tableNo = tableNo;
         this.fileType = fileType;

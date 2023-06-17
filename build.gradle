@@ -10,6 +10,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.11'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "org.asciidoctor.jvm.convert" version "3.3.2"  // (1)
 }
 
 
@@ -22,6 +23,11 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
+configurations {
+    asciidoctorExt // (2)
+}
+
+
 
 allprojects {
     repositories {
@@ -37,6 +43,7 @@ allprojects {
 
 ext {
     set('springCloudVersion', "2021.0.7")
+    snippetsDir = file('build/generated-snippets') // (5)
 }
 
 
@@ -48,6 +55,11 @@ dependencies {
 //Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.assertj:assertj-core:3.23.1'
+
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor' // (3)
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // (4)
+
+
 
 //SpringBoot Starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -71,7 +83,7 @@ dependencies {
 
 //ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.1'
-    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.4'
+    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.7'
 }
 
 
@@ -84,6 +96,28 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+    outputs.dir snippetsDir // (6)
+}
+
+asciidoctor {
+    configurations 'asciidoctorExt' // (7)
+    baseDirFollowsSourceFile() // (8)
+    inputs.dir snippetsDir // (9)
+    dependsOn test // (10)
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')  // (11)
+}
+
+task copyDocument(type: Copy) { // (12)
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
 }
 
 
@@ -110,3 +144,36 @@ compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 // querydsl 세팅 끝
+
+
+/**
+ *
+ (1) asciidoctor에 대한 플러그인을 추가해준다.
+ 이 플러그인은 adoc 파일을 변환하고 build 디렉토리에 복사하기 위해 사용하는 플러그인이다. gradle 7 부터는 이전에 사용하던 org.asciidoctor.convert 대신asciidoctor.jvm.convert를 사용해야 한다.
+
+ (2) asciidoctorExt을 Configuration에 지정해준다.
+
+ (3) dependencies에 spring-restdocs-asciidoctor를 추가해준다.
+ adoc 파일에서 사용할 snippets 속성이 자동으로 build/generated-snippets를 가리키도록 해준다.
+
+ (4) MockMvc를 사용하여 테스트할 예정이기 때문에 spring-restdocs-mockmvc 도 dependencies에 추가해준다.
+
+ (5) snippets 파일이 저장될 경로를 설정해준다.
+
+ (6) 출력할 디렉토리는 설정해준다.
+
+ (7) asciidoctor에서 asciidoctorExt을 configurations로 사용하도록 설정한다.
+
+ (8) .adoc 파일에서는 다른 .adoc 파일을 include하여 사용할 수 있는데 그럴 경우 경로를 동일하게 baseDir로 설정해준다. Gradle 6 버전에서는 자동으로 해주지만 7부터는 직접 명시해줘야 한다.
+
+ (9) input 디렉토리를 설정해준다.
+
+ (10) build시 test 후 asciidoctor를 진행하도록 설정해준다. (순서 설정)
+
+ (11) 중복을 막기 위해 새로운 문서를 생성할 때에는 전에 생성했던 문서들을 먼저 지워준다.
+
+ (12) build/docs/asciidoc 디렉토리에 생성된 html 문서를
+ src/main/resources/static/docs 디렉토리에 복사해온다.
+
+ (13) copyDocument 후 build 지정
+ */

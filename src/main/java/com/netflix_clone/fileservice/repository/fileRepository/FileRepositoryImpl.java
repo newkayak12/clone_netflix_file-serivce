@@ -67,7 +67,7 @@ public class FileRepositoryImpl extends QuerydslRepositorySupport implements Fil
                         file.tableNo.in(tableNos)
                    .and(file.fileType.eq(fileType))
                 )
-                .orderBy(file.orders.asc())
+                .orderBy(file.tableNo.asc(), file.orders.asc(), file.fileNo.asc())
                 .fetch();
     }
 

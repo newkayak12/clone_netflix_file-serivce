@@ -95,26 +95,43 @@ public class FileService {
 
     public Boolean remove(Long tableNo, FileType fileType) throws CommonException {
         List<FileDto> list = repository.files(tableNo, fileType);
-
-        this.removeFile(list);
-
-        return repository.remove(tableNo, fileType);
+        return  this.removeFile(list) && repository.remove(tableNo, fileType);
     }
 
     public Boolean remove(List<Long> tableNos, FileType fileType) throws CommonException {
         List<FileDto> list = repository.files(tableNos, fileType);
-        this.removeFile(list);
-        return repository.remove(tableNos, fileType);
+        return this.removeFile(list) && repository.remove(tableNos, fileType);
     }
 
-    public Boolean removeNotIn(List<FileDto> list) throws CommonException {
-        FileDto dto = list.stream().findAny().orElseThrow(() -> new CommonException(BecauseOf.NO_DATA));
-        List<FileDto> persistedList = repository.files(dto.getTableNo(), dto.getFileType());
-        persistedList.removeAll(list);
+    public Boolean removeNotIn(List<Long> fileNos) throws CommonException {
+        List<FileDto> exceptList = repository.findFilesByFileNoIn(fileNos)
+                .stream()
+                .map( file -> mapper.map(file, FileDto.class))
+                .collect(Collectors.toList());
+
+        if( exceptList.isEmpty() ) throw new CommonException(BecauseOf.NO_DATA);
+        FileDto reference = exceptList.stream().findAny().get();
+        Long tableNo = reference.getTableNo();
+        FileType fileType = reference.getFileType();
+
+        List<FileDto> persistedList = repository.findFilesByTableNoAndFileType(tableNo, fileType)
+                                       .stream()
+                                       .map( file -> mapper.map(file, FileDto.class))
+                                       .collect(Collectors.toList());;
+
+        persistedList.removeAll(exceptList);
         this.removeFile(persistedList);
-        return repository.removeNotIn(list.stream().map(FileDto::getFileNo).collect(Collectors.toList()));
+
+        return repository.removeNotIn(exceptList.stream().map(FileDto::getFileNo).collect(Collectors.toList()));
     }
-    public Boolean removeIn(List<FileDto> list) throws CommonException {
+    public Boolean removeIn( List<Long> fileNos) throws CommonException {
+        List<FileDto> list = repository.findFilesByFileNoIn(fileNos)
+                                       .stream()
+                                       .map( file -> mapper.map(file, FileDto.class))
+                                       .collect(Collectors.toList());
+
+        if( list.isEmpty() ) throw new CommonException(BecauseOf.NO_DATA);
+
         this.removeFile(list);
         return repository.removeIn(list.stream().map(FileDto::getFileNo).collect(Collectors.toList()));
     }
@@ -123,10 +140,10 @@ public class FileService {
 
 
     private Boolean removeFile ( List<FileDto> list ) throws CommonException {
-        List<FileResult> result = list.stream().map(dto -> mapper.map(dto, FileResult.class)).collect(Collectors.toList());
+        FileResult[] result = list.stream().map(dto -> mapper.map(dto, FileResult.class)).toArray(FileResult[]::new);
 
         // TODO FileUploader => remove
-        if ( !result.isEmpty() && fileUpload.remove() <= 0 ) throw new CommonException(BecauseOf.DELETE_FAILURE);
+        if ( result.length > 0 && fileUpload.remove(result) <= 0 ) throw new CommonException(BecauseOf.DELETE_FAILURE);
 
         return true;
     }

@@ -10,4 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration (value = "eureka_configuration")
 @EnableEurekaClient
 public class EurekaConfig {
+
+    public EurekaConfig() {
+    }
 }
