@@ -1,4 +1,4 @@
-package com.netflix_clone.fileservice.exceptions;
+package com.netflix_clone.fileservice.component.exceptions;
 
 import lombok.Getter;
 

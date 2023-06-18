@@ -1,6 +1,6 @@
 package com.netflix_clone.fileservice.repository.domains;
 
-import com.netflix_clone.fileservice.enums.FileType;
+import com.netflix_clone.fileservice.component.enums.FileType;
 import lombok.ToString;
 
 import javax.persistence.*;

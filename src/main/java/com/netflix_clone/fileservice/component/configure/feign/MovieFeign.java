@@ -1,4 +1,4 @@
-package com.netflix_clone.fileservice.configure.feign;
+package com.netflix_clone.fileservice.component.configure.feign;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -1,14 +1,12 @@
 package com.netflix_clone.fileservice.repository.dto.reference;
 
-import com.netflix_clone.fileservice.enums.FileType;
+import com.netflix_clone.fileservice.component.enums.FileType;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Created on 2023-05-19

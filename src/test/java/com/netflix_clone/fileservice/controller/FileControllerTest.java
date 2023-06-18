@@ -1,7 +1,7 @@
 package com.netflix_clone.fileservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix_clone.fileservice.enums.FileType;
+import com.netflix_clone.fileservice.component.enums.FileType;
 import com.netflix_clone.fileservice.util.AbstractControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

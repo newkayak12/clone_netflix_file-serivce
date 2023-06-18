@@ -1,4 +1,4 @@
-package com.netflix_clone.fileservice.enums;
+package com.netflix_clone.fileservice.component.enums;
 
 /**
  * Created on 2023-05-19

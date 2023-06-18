@@ -1,5 +1,6 @@
-package com.netflix_clone.fileservice.configure.feign;
+package com.netflix_clone.fileservice.component.configure.feign;
 
+import com.netflix_clone.fileservice.component.configure.ConfigMsg;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,4 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(value = "feignConfig")
 @EnableFeignClients
 public class FeignConfig {
+    public FeignConfig() {
+        ConfigMsg.msg("Feign");
+    }
 }

@@ -1,9 +1,10 @@
-package com.netflix_clone.fileservice.configure.objectMapper;
+package com.netflix_clone.fileservice.component.configure.objectMapper;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.netflix_clone.fileservice.component.configure.ConfigMsg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +13,13 @@ import javax.annotation.PostConstruct;
 
 @Configuration(value = "objectMapperConfig")
 //@Component
-@RequiredArgsConstructor
 public class ObjectMapperConfig {
     private  ObjectMapper objectMapper;
+
+    public ObjectMapperConfig() {
+        this.objectMapper = new ObjectMapper();
+        ConfigMsg.msg("ObjectMapper");
+    }
 
     private void deserializeWhenEmptyCase() {
         this.objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
@@ -47,14 +52,9 @@ public class ObjectMapperConfig {
 
     @Bean
     public ObjectMapper objectMapper () {
-        this.objectMapper = new ObjectMapper();
         this.deserializeSettings();
         this.serializeSettings();
         return this.objectMapper;
     }
 
-    @PostConstruct
-    public void msg() {
-        System.out.println("OBJMPPER");
-    }
 }

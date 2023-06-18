@@ -1,10 +1,9 @@
 package com.netflix_clone.fileservice.repository.fileRepository;
 
-import com.netflix_clone.fileservice.enums.FileType;
+import com.netflix_clone.fileservice.component.enums.FileType;
 import com.netflix_clone.fileservice.repository.domains.File;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
 import com.netflix_clone.fileservice.repository.dto.reference.QFileDto;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.jpa.JPQLQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;

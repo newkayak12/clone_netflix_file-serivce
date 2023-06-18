@@ -1,7 +1,7 @@
 package com.netflix_clone.fileservice.controller;
 
-import com.netflix_clone.fileservice.enums.FileType;
-import com.netflix_clone.fileservice.exceptions.CommonException;
+import com.netflix_clone.fileservice.component.enums.FileType;
+import com.netflix_clone.fileservice.component.exceptions.CommonException;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
 import com.netflix_clone.fileservice.repository.dto.request.FileRequest;
 import com.netflix_clone.fileservice.repository.dto.request.FileRequests;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created on 2023-05-12

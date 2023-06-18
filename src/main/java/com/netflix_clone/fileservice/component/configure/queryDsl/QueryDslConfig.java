@@ -1,5 +1,6 @@
-package com.netflix_clone.fileservice.configure.queryDsl;
+package com.netflix_clone.fileservice.component.configure.queryDsl;
 
+import com.netflix_clone.fileservice.component.configure.ConfigMsg;
 import com.querydsl.jpa.JPQLQueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +17,13 @@ import javax.persistence.PersistenceContext;
 //@RequiredArgsConstructor
 public class QueryDslConfig {
 
+
     @PersistenceContext
     private EntityManager entityManager;
+
+    public QueryDslConfig() {
+        ConfigMsg.msg("QueryDsl");
+    }
 
     @Bean
     public JPQLQueryFactory jPQLQueryFactory(){

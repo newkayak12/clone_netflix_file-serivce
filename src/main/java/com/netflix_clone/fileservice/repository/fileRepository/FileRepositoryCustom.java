@@ -1,6 +1,6 @@
 package com.netflix_clone.fileservice.repository.fileRepository;
 
-import com.netflix_clone.fileservice.enums.FileType;
+import com.netflix_clone.fileservice.component.enums.FileType;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
 
 import java.util.List;

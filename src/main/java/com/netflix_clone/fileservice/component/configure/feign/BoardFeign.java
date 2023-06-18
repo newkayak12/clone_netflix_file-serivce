@@ -1,4 +1,4 @@
-package com.netflix_clone.fileservice.configure.feign;
+package com.netflix_clone.fileservice.component.configure.feign;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
  * Project user-service
  */
 @Component
-@Qualifier(value = "user")
-@FeignClient(value = "netflix-clone-user-service")
-public interface UserFeign {
+@Qualifier(value = "board")
+@FeignClient(value = "netflix-clone-board-service")
+public interface BoardFeign {
 
+    @GetMapping("/api/v1/board/faqs/")
+    public String getFaq();
 }

@@ -1,6 +1,6 @@
-package com.netflix_clone.fileservice.configure;
+package com.netflix_clone.fileservice.component.configure;
 
-import com.netflix_clone.fileservice.exceptions.CommonException;
+import com.netflix_clone.fileservice.component.exceptions.CommonException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

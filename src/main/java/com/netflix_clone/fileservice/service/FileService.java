@@ -1,14 +1,13 @@
 package com.netflix_clone.fileservice.service;
 
-import com.netflix_clone.fileservice.enums.FileType;
-import com.netflix_clone.fileservice.exceptions.BecauseOf;
-import com.netflix_clone.fileservice.exceptions.CommonException;
+import com.netflix_clone.fileservice.component.enums.FileType;
+import com.netflix_clone.fileservice.component.exceptions.BecauseOf;
+import com.netflix_clone.fileservice.component.exceptions.CommonException;
 import com.netflix_clone.fileservice.repository.domains.File;
 import com.netflix_clone.fileservice.repository.dto.reference.FileDto;
 import com.netflix_clone.fileservice.repository.dto.request.FileRequest;
 import com.netflix_clone.fileservice.repository.dto.request.FileRequests;
 import com.netflix_clone.fileservice.repository.fileRepository.FileRepository;
-import com.sun.mail.iap.CommandFailedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

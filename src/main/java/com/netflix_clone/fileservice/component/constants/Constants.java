@@ -1,4 +1,4 @@
-package com.netflix_clone.fileservice.constants;
+package com.netflix_clone.fileservice.component.constants;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
