@@ -51,7 +51,6 @@ public class FileService {
     }
 
     public List<FileDto> saves(FileRequests requests) {
-        log.warn("??????? {}", requests);
         List<FileResult> result =fileUpload.upload(true, requests.getRawFiles().toArray(MultipartFile[]::new));
         return result.stream().map( r -> {
             FileDto dto = this.resultToDto(r);
