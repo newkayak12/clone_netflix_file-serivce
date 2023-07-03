@@ -73,7 +73,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.security:spring-security-crypto'
-
+    implementation 'org.springframework.data:spring-data-redis'
+    implementation 'io.lettuce:lettuce-core'
 
 //Hibernate & QueryDSL
     implementation 'com.querydsl:querydsl-core'
@@ -83,7 +84,12 @@ dependencies {
 
 //ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.1'
-    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.7'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
+
+
+    implementation 'com.github.newkayak12:Dependency-FileUpload:1.0.8'
 }
 
 
